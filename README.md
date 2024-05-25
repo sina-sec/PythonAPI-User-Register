@@ -119,3 +119,78 @@ def token_required(f):
 ```
 Decorator function to ensure the request has a valid JWT token.
 
+### 5- Route Implementations:
+```
+- Protected Route:
+@app.route('/protected')
+@token_required
+def protected(username):
+    return jsonify({'message': f'Hello, {username}! This is a protected endpoint.'})
+```
+- user Registration:
+```
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.json
+    username = data.get('username')
+    password = data.get('password')
+    first_name = data.get('first_name')
+    last_name = data.get('last_name')
+    age = data.get('age')
+    phone_number = data.get('phone_number')
+
+    if username and password:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            try:
+                c.execute("INSERT INTO users (username, first_name, last_name, age, phone_number) VALUES (?, ?, ?, ?, ?)", (username, first_name, last_name, age, phone_number))
+                c.execute("INSERT INTO passwords (username, password) VALUES (?, ?)", (username, password))
+                conn.commit()
+                return jsonify({'message': 'Registration successful!'})
+            except sqlite3.IntegrityError:
+                return jsonify({'message': 'Username already exists!'}), 400
+    else:
+        return jsonify({'message': 'Missing username or password!'}), 400
+
+```
+### 6- Wallet Management:
+
+- Add Wallet:
+```
+@app.route('/add_wallet', methods=['POST'])
+@token_required
+def add_wallet(username):
+    data = request.json
+    balance = data.get('balance')
+    wallet_type = data.get('wallet_type')
+    currency = data.get('currency')
+    description = data.get('description')
+    status = data.get('status')
+    created_at = datetime.datetime.now()
+    last_updated_at = created_at
+
+    if balance is not None and isinstance(balance, int) and balance >= 0:
+        with get_db_connection() as conn:
+            c = conn.cursor()
+            try:
+                c.execute("INSERT INTO wallets (username, balance, wallet_type, currency, description, status, created_at, last_updated_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", (username, balance, wallet_type, currency, description, status, created_at, last_updated_at))
+                conn.commit()
+                return jsonify({'message': 'Wallet added successfully!'})
+            except sqlite3.IntegrityError:
+                return jsonify({'message': 'Wallet already exists for this user!'}), 400
+    else:
+        return jsonify({'message': 'Invalid balance provided!'}), 400
+
+```
+
+
+#### Running the Application:
+```
+if __name__ == '__main__':
+    app.run(debug=True)
+
+```
+
+Starts the Flask application in debug mode, making it easier to develop and troubleshoot.
+
+This setup provides a basic but functional example of user authentication, user registration, and wallet management using Flask and SQLite, with JWT for secure authentication.
