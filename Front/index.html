@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خوش آمدید!</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            direction: rtl;
+            background-color: #f8f9fa;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            background-color: #007bff;
+            color: #fff;
+            text-align: center;
+            padding: 20px 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .dropdown button {
+            background-color: #007bff;
+            color: white;
+            padding: 12px 16px;
+            border: none;
+            cursor: pointer;
+        }
+        .dropdown button:hover {
+            background-color: #0056b3;
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        .dropdown-content a {
+            color: #333;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        .dropdown-content a:hover {
+            background-color: #f1f1f1;
+        }
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>به برنامه ثبت نام کاربران خوش آمدید!</h1>
+    </header>
+    <div class="container">
+        <p>این یک برنامه ساده به زبان فارسی است که با استفاده از Flask و Python نوشته شده است.</p>
+        <p>لطفا از منوهای زیر برای دسترسی به عملیات مورد نیاز استفاده کنید:</p>
+        <div class="dropdown">
+            <button class="dropbtn">ورود و ثبت نام</button>
+            <div class="dropdown-content">
+                <a href="/login">ورود</a>
+                <a href="/register">ثبت نام</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">مدیریت کاربران</button>
+            <div class="dropdown-content">
+                <a href="/add_user">افزودن کاربر</a>
+                <a href="/delete_account">حذف حساب کاربری</a>
+                <a href="/edit_user">ویرایش کاربر</a>
+                <a href="/edit_user_info">ویرایش اطلاعات کاربری</a>
+                <a href="/user_tokens">توکن‌های کاربر</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">مدیریت کیف پول</button>
+            <div class="dropdown-content">
+                <a href="/add_wallet">افزودن کیف پول</a>
+                <a href="/delete_wallet">حذف کیف پول</a>
+                <a href="/edit_wallet">ویرایش کیف پول</a>
+            </div>
+        </div>
+        <div class="dropdown">
+            <button class="dropbtn">اطلاعات محافظت شده</button>
+            <div class="dropdown-content">
+                <a href="/protected">اطلاعات محافظت شده</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
