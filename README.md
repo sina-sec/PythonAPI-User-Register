@@ -9,7 +9,7 @@ The provided code sets up a Flask application with user authentication, registra
 ### 1- Importing Libraries:
 
 ---
-'''
+```
  import jwt
  import datetime
  import secrets
@@ -17,7 +17,7 @@ The provided code sets up a Flask application with user authentication, registra
  from flask import Flask, request, jsonify
  import sqlite3
  import requests
-
+```
 
 ### 2- Application Setup:
 
