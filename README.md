@@ -20,19 +20,19 @@ The provided code sets up a Flask application with user authentication, registra
 ```
 
 ### 2- Application Setup:
-
+```
 app = Flask(__name__)
 SECRET_KEY = secrets.token_hex(16)
-
+```
 
 ### 3- Database Connection and Table Creation:
-
+```
 get_db_connection(): Establishes a connection to the SQLite database.
 create_users_table(), create_tokens_table(), create_passwords_table(), create_wallets_table(): Functions to create necessary tables if they do not exist.
 create_database_tables(): Calls the above functions to ensure all tables are created.
-
+```
 ### 4- Routes:
-
+```
 /protected: Protected route example that returns a message for authenticated users.
 /login: Authenticates users and generates tokens.
 /register: Registers new users.
@@ -44,8 +44,9 @@ create_database_tables(): Calls the above functions to ensure all tables are cre
 /add_wallet: Adds a new wallet for the user.
 /delete_wallet: Deletes a user's wallet.
 /edit_wallet: Edits an existing wallet.
-
+```
 ### 5- Helper Functions:
-
+```
 authenticate_user(username, password): Verifies the user's password.
 get_user_tokens(): Retrieves all user tokens from the database.
+```
