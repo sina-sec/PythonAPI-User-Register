@@ -1,0 +1,65 @@
+# روت برای ویرایش اطلاعات کاربری
+class EditUserInfo(Resource):
+    @token_required
+    def post(self, username):
+        data = request.json
+        new_first_name = data.get('new_first_name')
+        new_last_name = data.get('new_last_name')
+        new_age = data.get('new_age')
+        new_phone_number = data.get('new_phone_number')
+        new_password = data.get('new_password')
+        current_password = data.get('current_password')
+        new_username = data.get('new_username')
+
+        if new_first_name or new_last_name or new_age or new_phone_number or new_password:  
+            with get_db_connection() as conn:
+                c = conn.cursor()
+                c.execute("SELECT password FROM passwords WHERE username=?", (username,))
+                user_password = c.fetchone()
+
+                if user_password and user_password[0] == current_password:
+                    try:
+                        if new_first_name:
+                            c.execute("UPDATE users SET first_name=? WHERE username=?", (new_first_name, username))
+                        if new_last_name:
+                            c.execute("UPDATE users SET last_name=? WHERE username=?", (new_last_name, username))
+                        if new_age:
+                            c.execute("UPDATE users SET age=? WHERE username=?", (new_age, username))
+                        if new_phone_number:
+                            c.execute("UPDATE users SET phone_number=? WHERE username=?", (new_phone_number, username))
+
+                        if new_password:
+                            c.execute("UPDATE passwords SET username=?, password=? WHERE username=?", (new_username, new_password, username))
+
+                        if new_username:
+                            c.execute("UPDATE users SET username=? WHERE username=?", (new_username, username))
+                            c.execute("UPDATE tokens SET username=? WHERE username=?", (new_username, username))
+
+                        conn.commit()
+                        return jsonify({'message': 'User information updated successfully!'})
+                    except sqlite3.Error as e:
+                        return jsonify({'message': 'An error occurred while updating user information.', 'error': str(e)}), 500
+                else:
+                    return jsonify({'message': 'Invalid current password!'}), 401
+        else:
+            return jsonify({'message': 'No new information provided!'}), 400
+
+# کلاس برای Protected
+class Protected(Resource):
+    # دکوراتور برای نیاز به احراز هویت توکن برای دسترسی به روت
+    @staticmethod
+    @token_required
+    def get(username):
+        # درخواست همه‌ی کاربران از دیتابیس
+        users = User.query.all()
+        
+        # تبدیل کاربران به فرمت JSON
+        user_list = [{'id': user.id, 'name': user.name, 'email': user.email} for user in users]
+        
+        # برگرداندن JSON به عنوان پاسخ
+        return jsonify(user_list)
+
+@app.route('/swagger.json')
+def swagger():
+    with open('swagger.json', 'r') as f:
+        return jsonify(json.load(f)))
