@@ -194,3 +194,120 @@ if __name__ == '__main__':
 Starts the Flask application in debug mode, making it easier to develop and troubleshoot.
 
 This setup provides a basic but functional example of user authentication, user registration, and wallet management using Flask and SQLite, with JWT for secure authentication.
+
+
+
+
+#####  To communicate with this API through curl, you need to send the appropriate HTTP requests to different routes. Below are the curl commands for each root.
+
+### - 1. Register a new user ('/register')
+```
+curl -X POST http://localhost:5000/register -H "Content-Type: application/json" -d '{
+    "username": "your_username",
+    "password": "your_password",
+    "first_name": "YourFirstName",
+    "last_name": "YourLastName",
+    "age": 25,
+    "phone_number": "1234567890"
+}'
+
+```
+### - 2- 2. Login and get a token ('/login')
+```
+curl -X POST http://localhost:5000/login -H "Content-Type: application/json" -d '{
+    "username": "your_username",
+    "password": "your_password"
+}'
+
+```
+### - 3. Access a protected route ('/protected')
+
+```
+curl -X GET http://localhost:5000/protected -H "Authorization: Bearer your_jwt_token"
+
+```
+### - 4. Add a new user ('/add_user')
+
+```
+curl -X POST http://localhost:5000/add_user -H "Content-Type: application/json" -d '{
+    "username": "new_username",
+    "password": "new_password",
+    "first_name": "NewFirstName",
+    "last_name": "NewLastName",
+    "age": 30,
+    "phone_number": "0987654321"
+}'
+
+```
+### - 5. Delete an account ('/delete_account')
+
+```
+curl -X POST http://localhost:5000/delete_account -H "Authorization: Bearer your_jwt_token" -H "Content-Type: application/json" -d '{
+    "password": "your_password"
+}'
+
+```
+### - 6. Edit user information ('/edit_user')
+
+```
+curl -X POST http://localhost:5000/edit_user -H "Authorization: Bearer your_jwt_token" -H "Content-Type: application/json" -d '{
+    "new_username": "new_username",
+    "new_password": "new_password",
+    "current_password": "your_current_password"
+}'
+
+```
+### - 7. Edit user details ('/edit_user_info')
+
+```
+curl -X POST http://localhost:5000/edit_user_info -H "Authorization: Bearer your_jwt_token" -H "Content-Type: application/json" -d '{
+    "new_first_name": "NewFirstName",
+    "new_last_name": "NewLastName",
+    "new_age": 28,
+    "new_phone_number": "1122334455",
+    "new_password": "new_password",
+    "current_password": "your_current_password",
+    "new_username": "new_username"
+}'
+
+```
+### - 8. List all user tokens ('/user_tokens')
+
+```
+curl -X GET http://localhost:5000/user_tokens
+
+```
+### - 9. Add a wallet to a user account ('/add_wallet')
+
+```
+curl -X POST http://localhost:5000/add_wallet -H "Authorization: Bearer your_jwt_token" -H "Content-Type: application/json" -d '{
+    "balance": 1000,
+    "wallet_type": "personal",
+    "currency": "USD",
+    "description": "My wallet",
+    "status": "active"
+}'
+
+```
+### - 10. Delete a wallet ('/delete_wallet')
+
+```
+curl -X POST http://localhost:5000/delete_wallet -H "Authorization: Bearer your_jwt_token" -H "Content-Type: application/json" -d '{
+    "password": "your_password",
+    "username": "your_username"
+}'
+
+```
+### - 11. Edit a wallet ('/edit_wallet')
+
+```
+curl -X POST http://localhost:5000/edit_wallet -H "Authorization: Bearer your_jwt_token" -H "Content-Type: application/json" -d '{
+    "balance": 2000,
+    "wallet_type": "business",
+    "currency": "EUR",
+    "description": "Updated wallet",
+    "status": "inactive"
+}'
+
+```
+######  For each protected request, replace your_jwt_token with the JWT token obtained from the /login endpoint. Also, replace the placeholder values (e.g., your_username, your_password, etc.) with actual data.
