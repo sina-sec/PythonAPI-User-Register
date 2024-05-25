@@ -195,10 +195,10 @@ Starts the Flask application in debug mode, making it easier to develop and trou
 
 This setup provides a basic but functional example of user authentication, user registration, and wallet management using Flask and SQLite, with JWT for secure authentication.
 
+---
 
 
-
-#####  To communicate with this API through curl, you need to send the appropriate HTTP requests to different routes. Below are the curl commands for each root.
+#  To communicate with this API through curl, you need to send the appropriate HTTP requests to different routes. Below are the curl commands for each root.
 
 ### - 1. Register a new user ('/register')
 ```
