@@ -50,3 +50,72 @@ create_database_tables(): Calls the above functions to ensure all tables are cre
 authenticate_user(username, password): Verifies the user's password.
 get_user_tokens(): Retrieves all user tokens from the database.
 ```
+
+##### Detailed Code Explanation:
+### 1- Generating a Secret Key:
+```
+SECRET_KEY = secrets.token_hex(16)
+```
+Generates a random 32-character hexadecimal string used as the secret key for encoding JWT tokens.
+
+### 2- Database Connection:
+
+```
+def get_db_connection():
+    conn = sqlite3.connect('users.db')
+    conn.row_factory = sqlite3.Row
+    return conn
+
+```
+Establishes a connection to the users.db SQLite database and configures the connection to return rows as dictionaries.
+
+### 3- Table Creation Functions:
+
+Table Creation Functions:
+```
+def create_users_table():
+    with get_db_connection() as conn:
+        c = conn.cursor()
+        c.execute('''CREATE TABLE IF NOT EXISTS users
+                     (username TEXT PRIMARY KEY, first_name TEXT, last_name TEXT, age INTEGER, phone_number TEXT)''')
+
+```
+Similar functions are created for tokens, passwords, and wallets tables.
+
+### 4- JWT Token Functions:
+
+```
+def generate_token(username):
+    payload = {
+        'username': username,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=30)
+    }
+    token = jwt.encode(payload, SECRET_KEY, algorithm='HS256')
+    return token
+
+```
+Generates a JWT token with an expiration time of 30 minutes.
+
+```
+def token_required(f):
+    @wraps(f)
+    def decorated(*args, **kwargs):
+        token = request.headers.get('Authorization')
+        if not token:
+            return jsonify({'message': 'Token is missing!'}), 401
+        token_parts = token.split(' ')
+        if len(token_parts) != 2 or token_parts[0].lower() != 'bearer':
+            return jsonify({'message': 'Invalid token format!'}), 401
+        try:
+            data = jwt.decode(token_parts[1], SECRET_KEY, algorithms=['HS256'])
+            username = data['username']
+        except jwt.ExpiredSignatureError:
+            return jsonify({'message': 'Token has expired!'}), 401
+        except jwt.InvalidTokenError:
+            return jsonify({'message': 'Token is invalid!'}), 401
+        return f(username, *args, **kwargs)
+    return decorated
+
+```
+Decorator function to ensure the request has a valid JWT token.
+
