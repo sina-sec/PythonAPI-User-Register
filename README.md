@@ -16,7 +16,7 @@ The provided code sets up a Flask application with user authentication, registra
  from flask import Flask, request, jsonify
  import sqlite3
  import requests
-
+---
 
 ### 2- Application Setup:
 
